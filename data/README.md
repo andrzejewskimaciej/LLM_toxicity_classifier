@@ -22,37 +22,7 @@ BAN-PL jest bogaty w przykłady typowo polskiej inwencji w omijaniu filtrów:
 
 - **Substytucja fonetyczna:** Zapisywanie słów tak, jak się je słyszy, ale z błędami (np. "duq" zamiast "duck" w kontekście anglicyzmów, lub polskie odpowiedniki).
 
-### [PolEval 2019 Task 6: Hierarchia Szkodliwości](https://huggingface.co/datasets/poleval/poleval2019_cyberbullying)
-
-Zbiór przygotowany na potrzeby konkursu PolEval 2019 jest fundamentalnym zasobem do badania gradacji szkodliwości w polskim Twitterze.   
-
-#### Skala Trójstopniowa (Zadanie 6-2)
-
-Organizatorzy wprowadzili podział, który pozwala na rozróżnienie ciężaru gatunkowego agresji:
-
-1. **Klasa 0 (Non-harmful):** Tweety neutralne.
-
-2. **Klasa 1 (Cyberbullying):** Cyberprzemoc. Kategoria ta obejmuje ataki personalne, nękanie, wyśmiewanie, plotki. Często są to treści **graniczne** z punktu widzenia prawa (mogą nie być ścigane z urzędu), ale są wysoce szkodliwe dla jednostki.
-
-3. **Klasa 2 (Hate-speech):** Mowa nienawiści. Ataki na grupy chronione (rasa, religia, orientacja). Jest to kategoria "najcięższa".
-
-Taka taksonomia pozwala na trenowanie modeli, które nie tylko wykrywają "coś złego", ale potrafią ocenić, czy mamy do czynienia z kłótnią (cyberbullying), czy z ideologiczną nienawiścią (hate speech).   
-
-#### Proces Adnotacji
-
-Zbiór ten był podwójnie weryfikowany: najpierw przez wolontariuszy, a następnie przez ekspertów od cyberprzemocy. Wprowadzenie "super-annotatora" w przypadkach spornych wskazuje na dbałość o jakość danych w strefie granicznej.
-
-### [DynaHate: Adwersarskie Generowanie Trudności](https://github.com/bvidgen/Dynamically-Generated-Hate-Speech-Dataset)
-
-**DynaHate** (Dynamic Hate) to zbiór powstały w procesie iteracyjnym, w którym ludzie próbowali "oszukać" model. Składa się z czterech rund.   
-
-#### Ewolucja Trudności
-
-- **Runda 1:** Przykłady proste, często zawierające wyraźne słowa kluczowe.
-
-- **Rundy 2-4:** Annotatorzy, widząc, że model wyłapuje proste ataki, zaczęli tworzyć treści coraz bardziej subtelne, ironiczne, oparte na stereotypach, ale bez wulgaryzmów.
-
-Przykłady z późniejszych rund DynaHate stanowią wzorzec **toksyczności ukrytej** (*implicit toxicity*). Zbiór ten jest idealny do trenowania modeli na wykrywanie treści, które są "bezpieczne" leksykalnie, ale "toksyczne" semantycznie.
+Kołos, A., Okulska, I., Głąbińska, K., Karlińska, A., Wiśnios, E., Ellerik, P., Prałat, A. [BAN-PL: a Novel Polish Dataset of Banned Harmful and Offensive Content from Wykop.pl web service](https://arxiv.org/abs/2308.10592). 2023. arXiv:2308.1059.
 
 ### [Civil Comments (Jigsaw): Złoty Standard Etykietowania Ułamkowego](https://www.tensorflow.org/datasets/catalog/civil_comments)
 
@@ -92,24 +62,5 @@ Oprócz głównej etykiety `toxicity`, zbiór dostarcza analogiczne ułamkowe o
 
 Szczególnie wartościowe dla analizy treści granicznych są podzbiory **CivilCommentsIdentities** oraz **CivilCommentsCovert**. Ten drugi zawiera specjalistyczne adnotacje dotyczące **niejawnej agresji** (*covert offensiveness*), w tym sarkazmu i mikroagresji, które stanowią najtrudniejszą część spektrum toksyczności. Zbiór ten bezpośrednio adresuje problem, gdzie tekst jest technicznie poprawny, ale intencjonalnie szkodliwy.   
 
-#### Dostępność i Licencja
-
-Zbiór jest dostępny na licencji **CC0 (Public Domain)**, co czyni go w pełni bezpiecznym do zastosowań komercyjnych i badawczych. Jest hostowany na platformach takich jak Kaggle, TensorFlow Datasets oraz HuggingFace.
-
-### [ETHOS: Wykrywanie Granic poprzez Aktywne Uczenie](https://github.com/intelligence-csd-auth-gr/Ethos-Hate-Speech-Dataset)
-
-Zbiór **ETHOS** (OnlinE haTe speecH detectiOn dataSet) powstał z wykorzystaniem protokołu **aktywnego uczenia się** (*active learning*), zaprojektowanego specjalnie w celu identyfikacji i adnotacji przykładów leżących na granicy decyzyjnej modelu.   
-
-#### Metodologia Uncertainty Sampling
-
-Autorzy ETHOS wykorzystali algorytm, który wybierał do ludzkiej weryfikacji te komentarze (z YouTube i Reddit), dla których wstępny model był najmniej pewny – tj. zwracał prawdopodobieństwo toksyczności w przedziale `[0.4, 0.6]`. W rezultacie, ETHOS jest zbiorem nasyconym treściami **granicznymi**, które są trudne do klasyfikacji zarówno dla maszyn, jak i ludzi.
-
-#### Wersja Binarna i Multi-Label
-
-Zbiór występuje w dwóch wariantach:
-
-1. **ETHOS Binary:** 998 komentarzy z etykietą binarną. Ze względu na metodę doboru, nawet te binarne etykiety są wynikiem rozstrzygania trudnych dylematów klasyfikacyjnych.
-
-2. **ETHOS Multi-Label:** 433 przykłady mowy nienawiści, opisane szczegółowo w 8 wymiarach (np. czy nawołuje do przemocy, czy jest atakiem skierowanym w osobę czy grupę). Te dodatkowe wymiary pozwalają na stopniowanie wagi przewinienia – atak nawołujący do przemocy jest na szczycie skali toksyczności, podczas gdy generalizacja bez przemocy może być niżej.
-
+Borkan D., Dixon L., Sorensen J., Thain N., Vasserman L. [Nuanced Metrics for Measuring Unintended Bias with Real Data for Text Classification](https://arxiv.org/abs/1903.04561). 2019. arXiv:1903.04561.
 
