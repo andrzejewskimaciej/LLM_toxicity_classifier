@@ -31,9 +31,7 @@ if "user_text_cache" not in st.session_state:
 def load_bert_model():
     """Loads the Toxic-BERT model into memory."""
     with st.spinner("Loading Toxic-BERT model into RAM..."):
-        return pipeline(
-            "text-classification", model="unitary/toxic-bert", return_all_scores=True
-        )
+        return pipeline("text-classification", model="unitary/toxic-bert", top_k=None)
 
 
 def analyze_with_ollama(text):
