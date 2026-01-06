@@ -259,8 +259,9 @@ def health_check():
     return {"status": "ok"}
 
 
+# for testing purpouses
 if __name__ == "__main__":
     import uvicorn
 
-    print("Start serwera na http://localhost:8000")
+    print("Starting server at http://localhost:8000")
     uvicorn.run(app, host="0.0.0.0", port=8000)
