@@ -4,7 +4,6 @@
 
 The **AI Toxicity Classifier** is a robust, automated tool designed to detect and categorize toxic content in text. Its primary goal is to identify harmful behaviors such as **threats, insults, obscenity, and identity attacks**, going beyond simple keyword filtering to understand **context and nuance** (including irony and satire).
 
----
 
 ## 🎯 Target Audience
 
@@ -12,7 +11,6 @@ The **AI Toxicity Classifier** is a robust, automated tool designed to detect an
 - **Trust & Safety Teams** – Ensure online safety and regulatory compliance  
 - **Platform Owners** – Scale moderation for forums, comment sections, and social applications  
 
----
 
 ## 🏗️ Architecture
 
@@ -28,13 +26,11 @@ The project follows a clear separation of concerns and provides both programmati
   - View radar charts  
   - Inspect contextual justifications  
 
----
 
 ## 🚀 Two Approaches
 
 The system offers two architectural variants depending on budget, privacy, and infrastructure needs.
 
----
 
 ### 1. ☁️ Cloud-Based (Google Gemini)
 
@@ -53,7 +49,6 @@ The system offers two architectural variants depending on budget, privacy, and i
 - API costs after free tier  
 - Data leaves your infrastructure  
 
----
 
 ### 2. 🖥️ Local Hybrid (Toxic-BERT + Llama 3.2)
 
@@ -77,7 +72,6 @@ A fully open-source, on-premise pipeline combining two models:
 - Full data privacy (offline)  
 - Efficient on consumer-grade CPUs  
 
----
 
 ## 🛠️ Implementation Details
 
@@ -94,7 +88,6 @@ A fully open-source, on-premise pipeline combining two models:
   - Docker Compose for orchestration
   - Consistent environments across deployments  
 
----
 
 ## 📦 Deployment (Docker)
 
@@ -107,7 +100,6 @@ All configuration files are located in the `docker-files` directory.
 - Docker Compose  
 - Google API Key *(required for Cloud/Gemini approach)*  
 
----
 
 ### ▶️ How to Run
 
