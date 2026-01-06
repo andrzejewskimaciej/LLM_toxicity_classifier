@@ -103,7 +103,11 @@ All configuration files are located in the `docker-files` directory.
 
 ### ▶️ How to Run
 
-#### 1. Set Environment Variable (for Cloud version)
+#### 1. Clone repository
+
+Clone repository to your machine.
+
+#### 2. Set Environment Variable (for Cloud version)
 
 Export your Google API key before starting the containers:
 
@@ -118,22 +122,29 @@ $Env:GOOGLE_API_KEY="your_key_here"
 set GOOGLE_API_KEY=your_key_here
 ```
 
-#### 2. Run the Chosen Environment
+#### 3. Run the Chosen Environment
 
 * Cloud (Gemini) version:
   ```
-  docker-compose -f docker-files/docker-compose.gemini.yml up --build
+  docker-compose -f toxicity_classifier_files/docker-compose.gemini.yml up --build
   ```
 
 * Local (Hybrid) version:
   ```
-  docker-compose -f docker-files/docker-compose.local.yml up --build
+  docker-compose -f toxicity_classifier_files/docker-compose.local.yml up --build
   ```
 
 *Note: The local version will automatically download the required LLM models on the first launch. Additionaly, both containers take up some space and time to set up.*
 
 ### 🌐 Access the Application
+#### Cloud version
 
 * **Web UI**: http://localhost:8501
 
 * **API Docs (Swagger)**: http://localhost:8000/docs
+
+#### Local version
+
+* **Web UI**: http://localhost:8502
+
+* **API Docs (Swagger)**: http://localhost:8001/docs
