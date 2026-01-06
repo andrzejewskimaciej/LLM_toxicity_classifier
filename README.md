@@ -35,7 +35,7 @@ The system offers two architectural variants depending on budget, privacy, and i
 ### 1. ☁️ Cloud-Based (Google Gemini)
 
 - **Model**: Gemini 3.0 Flash (via API)
-- **Performance**: ~85% accuracy
+- **Performance**: ~80% accuracy
 - **Capabilities**:
   - Deep contextual understanding
   - Strong handling of sarcasm and cultural nuance
@@ -62,7 +62,7 @@ A fully open-source, on-premise pipeline combining two models:
   - Triggered only when BERT flags suspicious content  
   - Provides reasoning and irony/satire checks  
 
-- **Performance**: ~72% accuracy
+- **Performance**: ~78% accuracy
 - **Language Support**:
   - Optimized for English  
   - Empirically performs quite well on Polish content  
