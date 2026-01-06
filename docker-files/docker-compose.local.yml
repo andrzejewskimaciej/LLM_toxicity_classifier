@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # --- The Brain (Ollama) ---
+  ollama-service:
+    image: ollama/ollama:latest
+    container_name: local_brain
+    volumes:
+      - ./ollama_data:/root/.ollama 
+      - ./entrypoint_ollama.sh:/entrypoint.sh
+    ports:
+      - "11434:11434"
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+
+  # --- API Service (FastAPI + BERT) ---
+  local-api:
+    build: .
+    container_name: local_api
+    command: uvicorn local_api:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama-service:11434
+      - HF_HOME=/root/.cache/huggingface
+    volumes:
+      - ./app:/app
+      - ./hf_cache:/root/.cache/huggingface
+    depends_on:
+      - ollama-service
+
+  # --- UI Service (Streamlit + BERT) ---
+  local-ui:
+    build: .
+    container_name: local_ui
+    command: streamlit run local_ui.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - OLLAMA_HOST=http://ollama-service:11434
+      - HF_HOME=/root/.cache/huggingface
+    volumes:
+      - ./app:/app
+      - ./hf_cache:/root/.cache/huggingface
+    depends_on:
+      - ollama-service
