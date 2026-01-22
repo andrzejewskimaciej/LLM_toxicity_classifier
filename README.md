@@ -88,6 +88,12 @@ A fully open-source, on-premise pipeline combining two models:
   - Docker Compose for orchestration
   - Consistent environments across deployments  
 
+## 📊 Interface Preview
+Below is an example of the Cloud Version in action.
+
+<img width="1916" height="939" alt="image" src="https://github.com/user-attachments/assets/87908860-eb81-4f95-a655-17a1ff1cea7c" />
+<img width="1910" height="443" alt="image" src="https://github.com/user-attachments/assets/a83bb5dd-f96c-4617-bbc4-17e0a540b5d6" />
+
 
 ## 📦 Deployment (Docker)
 
