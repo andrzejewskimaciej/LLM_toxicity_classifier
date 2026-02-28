@@ -154,20 +154,14 @@ def parse_results(
             item = json.loads(line)
             custom_id = item.get("custom_id")  # Używamy .get dla bezpieczeństwa
 
-            # --- POPRAWKA ---
-            # W Twoim JSONie 'candidates' są bezpośrednio w 'response',
-            # nie ma klucza 'body'.
             response_data = item.get("response", {})
             candidates = response_data.get("candidates", [])
 
             if candidates:
-                # Ścieżka: candidates[0] -> content -> parts[0] -> text
-                # Pobieramy tekst, który jest stringiem JSON
                 parts = candidates[0].get("content", {}).get("parts", [])
                 if parts:
                     raw_json_text = parts[0].get("text", "{}")
 
-                    # Czasami model może dodać znaczniki markdown, czyścimy je
                     raw_json_text = (
                         raw_json_text.replace("```json", "").replace("```", "").strip()
                     )
@@ -177,7 +171,6 @@ def parse_results(
                 else:
                     results_map[custom_id] = {"error": "Empty parts in response"}
             else:
-                # Sprawdzamy czy nie ma błędu w samej odpowiedzi (np. filtr bezpieczeństwa)
                 error_info = response_data.get("error", "No candidates returned")
                 results_map[custom_id] = {"error": str(error_info)}
 
@@ -189,7 +182,6 @@ def parse_results(
     # Łączenie wyników (Merge)
     final_output = []
     for cid, text in original_map.items():
-        # cid musi być stringiem, bo custom_id w JSONL jest stringiem
         cid = str(cid)
         analysis = results_map.get(cid)
 
@@ -222,7 +214,6 @@ async def analyze_batch_endpoint(request: BatchRequest):
     if not request.comments:
         raise HTTPException(status_code=400, detail="Lista komentarzy jest pusta.")
 
-    # Mapa ID -> Tekst do późniejszego złączenia
     original_map = {c.id: c.text for c in request.comments}
 
     # Tworzenie pliku tymczasowego

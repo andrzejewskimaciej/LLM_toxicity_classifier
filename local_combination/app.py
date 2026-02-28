@@ -18,7 +18,6 @@ This tool combines two distinct AI models for efficient moderation:
 """
 )
 
-# Inicjalizacja Session State (Pamięć podręczna aplikacji)
 if "analysis_result" not in st.session_state:
     st.session_state.analysis_result = None
 if "user_text_cache" not in st.session_state:
@@ -85,9 +84,7 @@ def complain_about_decision(text, initial_decision_is_toxic):
             format="json",
             options={"temperature": 0.0},
         )
-        # Parsowanie wyniku
         data = json.loads(response["message"]["content"])
-        # Zwracamy obiekt przypominający strukturę Pydantic z Twojego przykładu
         return type(
             "obj",
             (object,),
@@ -149,12 +146,9 @@ with col_input:
         height=150,
         placeholder="e.g., You are absolutely useless...",
     )
-    # Przycisk uruchamia logikę i zapisuje do STANU
     analyze_btn = st.button("Analyze Text", type="primary", width="stretch")
 
-# Logika uruchamiania analizy
 if analyze_btn and user_text:
-    # Zapisujemy tekst do cache, żeby był dostępny dla przycisku skargi
     st.session_state.user_text_cache = user_text
 
     # 1. BERT
@@ -168,15 +162,13 @@ if analyze_btn and user_text:
         with st.spinner("Llama is reading the context..."):
             ollama_result = analyze_with_ollama(user_text)
 
-    # ZAPISUJEMY WYNIK DO SESJI
     st.session_state.analysis_result = {
         "bert_results": bert_results,
         "max_score": max_score,
         "ollama_result": ollama_result,
-        "is_toxic_flag": max_score > 0.5,  # Flaga dla funkcji skargi
+        "is_toxic_flag": max_score > 0.5,
     }
 
-# --- WYŚWIETLANIE WYNIKÓW (Oparte na Stanie) ---
 if st.session_state.analysis_result:
     data = st.session_state.analysis_result
 
@@ -205,8 +197,6 @@ if st.session_state.analysis_result:
 
         st.markdown("---")
 
-        # --- SEKCJA SKARGI ---
-        # Teraz jest bezpieczna, bo jest w bloku zależnym od session_state
         complaint_btn = st.button(
             "Complain about the answer", type="secondary", width="stretch"
         )

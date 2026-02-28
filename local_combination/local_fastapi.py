@@ -175,8 +175,6 @@ async def analyze_batch(request: BatchAnalyzeRequest):
                     deciding_fragments=raw_llama.get("deciding_fragments", []),
                 )
         else:
-            # Debug log for safe text (optional, can be spammy for large batches)
-            # print(f"✅ [Text {i+1}] Safe: Score {max_score:.2f}. Skipping Llama.")
             pass
 
         # Build single result object

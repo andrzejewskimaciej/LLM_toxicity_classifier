@@ -153,11 +153,9 @@ def create_radar_chart(data: ToxicityAnalysis):
 
 # --- 4. USER INTERFACE ---
 
-# Inicjalizacja Session State (pamięci)
 if "analysis_result" not in st.session_state:
     st.session_state.analysis_result = None
 
-# Sidebar (pozostaje bez zmian)
 with st.sidebar:
     st.header("Configuration")
     env_key = os.environ.get("GOOGLE_API_KEY", "")
@@ -183,16 +181,13 @@ user_text = st.text_area(
     placeholder="e.g., You are absolutely useless and I hate your opinion...",
 )
 
-# Przycisk uruchamia analizę i ZAPISUJE wynik do pamięci
 analyze_btn = st.button("Analyze Text", type="primary", width="stretch")
 
 if analyze_btn and user_text:
     with st.spinner("Gemini is analyzing context and nuances..."):
         result = analyze_text(client, user_text)
-        # ZAPISUJEMY WYNIK W SESJI
         st.session_state.analysis_result = result
 
-# Wyświetlanie opieramy na PAMIĘCI (session_state), a nie na kliknięciu przycisku
 if st.session_state.analysis_result:
     result = st.session_state.analysis_result
 
@@ -236,14 +231,12 @@ if st.session_state.analysis_result:
             else:
                 st.caption("None identified.")
 
-    # Przycisk skargi jest teraz widoczny, bo opiera się na session_state.analysis_result
     complaint_button = st.button(
         "Complain about the answer", type="secondary", width="stretch"
     )
 
     if complaint_button:
         with st.spinner("Gemini is answering your complaint..."):
-            # Uwaga: user_text też musi być dostępny. Jeśli znika, warto go też wrzucić do session_state
             argue_response = complain_about_decision(
                 client, user_text, result.toxicity > 0.5
             )
@@ -251,7 +244,7 @@ if st.session_state.analysis_result:
             st.markdown("### 🧠 AI Complaint Response")
             st.info(
                 argue_response.new_desicion
-            )  # Poprawiłem literówkę w nazwie pola (new_desicion -> new_decision w modelu jeśli poprawisz)
+            )
 
 elif not st.session_state.analysis_result:
     if not user_text and analyze_btn:

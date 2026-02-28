@@ -102,7 +102,6 @@ def run_google_batch_process(jsonl_file_path: str) -> str:
         file=jsonl_file_path, config={"mime_type": "application/json"}
     )
 
-    # Czekanie na aktywację pliku
     while batch_input_file.state.name == "STATE_PROCESSING":
         time.sleep(1)
         batch_input_file = client.files.get(name=batch_input_file.name)
@@ -129,7 +128,6 @@ def run_google_batch_process(jsonl_file_path: str) -> str:
         elif state in ["JOB_STATE_CANCELLED", "JOB_STATE_EXPIRED"]:
             raise RuntimeError(f"Batch Job Stopped: {state}")
 
-        # Czekaj 5 sekund przed kolejnym sprawdzeniem
         print("waitin " + state)
         time.sleep(5)
 
@@ -139,9 +137,7 @@ def parse_results(
 ) -> List[AnalyzedComment]:
     """Pobiera wyniki z Google i łączy je z oryginalnymi tekstami."""
 
-    # Pobierz zawartość pliku wyjściowego
     file_content = client.files.download(file=output_file_name)
-    # Dekodowanie bajtów do stringa
     text_content = file_content.decode("utf-8")
 
     results_map: Dict[str, Any] = {}
@@ -154,20 +150,14 @@ def parse_results(
             item = json.loads(line)
             custom_id = item.get("custom_id")  # Używamy .get dla bezpieczeństwa
 
-            # --- POPRAWKA ---
-            # W Twoim JSONie 'candidates' są bezpośrednio w 'response',
-            # nie ma klucza 'body'.
             response_data = item.get("response", {})
             candidates = response_data.get("candidates", [])
 
             if candidates:
-                # Ścieżka: candidates[0] -> content -> parts[0] -> text
-                # Pobieramy tekst, który jest stringiem JSON
                 parts = candidates[0].get("content", {}).get("parts", [])
                 if parts:
                     raw_json_text = parts[0].get("text", "{}")
 
-                    # Czasami model może dodać znaczniki markdown, czyścimy je
                     raw_json_text = (
                         raw_json_text.replace("```json", "").replace("```", "").strip()
                     )
@@ -177,7 +167,6 @@ def parse_results(
                 else:
                     results_map[custom_id] = {"error": "Empty parts in response"}
             else:
-                # Sprawdzamy czy nie ma błędu w samej odpowiedzi (np. filtr bezpieczeństwa)
                 error_info = response_data.get("error", "No candidates returned")
                 results_map[custom_id] = {"error": str(error_info)}
 
@@ -186,14 +175,11 @@ def parse_results(
             if custom_id:
                 results_map[custom_id] = {"error": str(e)}
 
-    # Łączenie wyników (Merge)
     final_output = []
     for cid, text in original_map.items():
-        # cid musi być stringiem, bo custom_id w JSONL jest stringiem
         cid = str(cid)
         analysis = results_map.get(cid)
 
-        # Sprawdzamy czy analiza to sukces czy błąd
         if analysis and "error" not in analysis:
             final_output.append(AnalyzedComment(id=cid, text=text, analysis=analysis))
         else:
@@ -222,10 +208,8 @@ async def analyze_batch_endpoint(request: BatchRequest):
     if not request.comments:
         raise HTTPException(status_code=400, detail="Lista komentarzy jest pusta.")
 
-    # Mapa ID -> Tekst do późniejszego złączenia
     original_map = {c.id: c.text for c in request.comments}
 
-    # Tworzenie pliku tymczasowego
     with tempfile.NamedTemporaryFile(
         mode="w+", suffix=".jsonl", delete=False, encoding="utf-8"
     ) as temp_file:
@@ -234,10 +218,8 @@ async def analyze_batch_endpoint(request: BatchRequest):
         temp_file_path = temp_file.name
 
     try:
-        # 1. Uruchomienie procesu w Google
         output_file_name = run_google_batch_process(temp_file_path)
 
-        # 2. Parsowanie i łączenie wyników
         results = parse_results(output_file_name, original_map)
 
         return BatchResponse(
@@ -248,7 +230,6 @@ async def analyze_batch_endpoint(request: BatchRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
     finally:
-        # Sprzątanie pliku lokalnego
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
